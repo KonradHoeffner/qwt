@@ -1,8 +1,4 @@
 #![doc = include_str!("../README.md")]
-#![cfg_attr(
-    all(feature = "prefetch", target_arch = "aarch64"),
-    feature(stdarch_aarch64_prefetch)
-)]
 
 pub use mem_dbg;
 
