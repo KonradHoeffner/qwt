@@ -23,10 +23,12 @@ pub fn prefetch_read_NTA<T>(data: &[T], offset: usize) {
 
     #[cfg(all(feature = "prefetch", target_arch = "aarch64"))]
     {
-        use core::arch::aarch64::{_prefetch, _PREFETCH_LOCALITY0, _PREFETCH_READ};
-
         unsafe {
-            _prefetch(_p, _PREFETCH_READ, _PREFETCH_LOCALITY0);
+            std::arch::asm!(
+                "prfm pldl1strm, [{}]",
+                in(reg) _p,
+                options(nostack, readonly, preserves_flags)
+            );
         }
     }
 }
