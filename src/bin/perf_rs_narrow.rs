@@ -111,18 +111,18 @@ fn main() {
         let rs = RSNarrow::new(bv);
 
         println!(
-            "created new rs_narrow | n_ones: {} | n_zeros: {}",
-            rs.n_ones(),
-            rs.n_zeros(),
+            "created new rs_narrow | count_ones: {} | count_zeros: {}",
+            rs.count_ones(),
+            rs.count_zeros(),
         );
 
         let queries = gen_queries(N_QUERIES, n);
         perf_rank1(&rs, &queries, n, logn, n);
 
-        let queries = gen_queries(N_QUERIES, rs.n_ones() - 1);
+        let queries = gen_queries(N_QUERIES, rs.count_ones() - 1);
         perf_select1(&rs, &queries, n, logn, n);
 
-        let queries = gen_queries(N_QUERIES, rs.n_zeros() - 1);
+        let queries = gen_queries(N_QUERIES, rs.count_zeros() - 1);
         perf_select0(&rs, &queries, n, logn, n);
     }
 }

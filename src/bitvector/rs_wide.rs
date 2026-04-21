@@ -18,7 +18,7 @@ pub struct RSWide {
     bv: BitVector,
     superblock_metadata: Box<[u128]>, // in each u128 we store the pair (superblock, <7 blocks>) like so |L1  |L2|L2|L2|L2|L2|L2|L2|
     select_samples: [Box<[usize]>; 2],
-    n_zeros: usize,
+    count_zeros: usize,
 }
 
 impl RSWide {
@@ -56,7 +56,7 @@ impl RSWide {
                 // println!("metadata so far: {:0>128b}", cur_metadata);
             }
 
-            word_pop += dl.n_ones() as u128;
+            word_pop += dl.count_ones() as u128;
 
             if (total_rank + word_pop) / SELECT_ONES_PER_HINT as u128 > cur_hint_1 {
                 //we insert a new hint for 1
@@ -64,7 +64,7 @@ impl RSWide {
                 cur_hint_1 += 1;
             }
 
-            zeros_so_far += dl.n_zeros() as u128;
+            zeros_so_far += dl.count_zeros() as u128;
             if (zeros_so_far / SELECT_ZEROS_PER_HINT as u128) > cur_hint_0 {
                 //we insert a new hint for 0
                 select_samples[0].push(b / 8);
@@ -107,7 +107,7 @@ impl RSWide {
         select_samples[0].push(superblock_metadata.len() - 1);
         select_samples[1].push(superblock_metadata.len() - 1);
 
-        let n_zeros = bv.len() - total_rank as usize;
+        let count_zeros = bv.len() - total_rank as usize;
 
         Self {
             bv,
@@ -118,20 +118,20 @@ impl RSWide {
                 .collect::<Vec<_>>()
                 .try_into()
                 .unwrap(),
-            n_zeros,
+            count_zeros,
         }
     }
 
     /// Returns the number of bits set to 1 in the bitvector.
     #[inline(always)]
-    pub fn n_ones(&self) -> usize {
-        self.bv.len() - self.n_zeros()
+    pub fn count_ones(&self) -> usize {
+        self.bv.len() - self.count_zeros()
     }
 
     /// Returns the number of bits set to 0 in the bitvector.
     #[inline(always)]
-    pub fn n_zeros(&self) -> usize {
-        self.n_zeros
+    pub fn count_zeros(&self) -> usize {
+        self.count_zeros
     }
 
     /// Returns the number of bits in the bitvector.
@@ -324,8 +324,8 @@ impl RankBin for RSWide {
         prefetch_read_NTA(&self.superblock_metadata, superblock);
     }
 
-    fn n_zeros(&self) -> usize {
-        self.n_zeros()
+    fn count_zeros(&self) -> usize {
+        self.count_zeros()
     }
 }
 
@@ -353,7 +353,7 @@ impl SelectBin for RSWide {
     ///
     /// ```
     fn select1(&self, i: usize) -> Option<usize> {
-        if i >= self.n_ones() {
+        if i >= self.count_ones() {
             return None;
         }
 
@@ -399,7 +399,7 @@ impl SelectBin for RSWide {
     ///
     /// ```
     fn select0(&self, i: usize) -> Option<usize> {
-        if i >= self.n_zeros() {
+        if i >= self.count_zeros() {
             return None;
         }
 

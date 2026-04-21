@@ -116,14 +116,14 @@ impl RSNarrow {
 
     /// Returns the number of bits set to 1 in the bitvector.
     #[inline(always)]
-    pub fn n_ones(&self) -> usize {
+    pub fn count_ones(&self) -> usize {
         self.rank1(self.bv.len() - 1).unwrap() + self.bv.get(self.bv.len() - 1).unwrap() as usize
     }
 
     /// Returns the number of bits set to 0 in the bitvector.
     #[inline(always)]
-    pub fn n_zeros(&self) -> usize {
-        self.bv.len() - self.n_ones()
+    pub fn count_zeros(&self) -> usize {
+        self.bv.len() - self.count_ones()
     }
 
     #[inline(always)]
@@ -298,14 +298,14 @@ impl RankBin for RSNarrow {
         prefetch_read_NTA(&self.block_rank_pairs, pos >> 8);
     }
 
-    fn n_zeros(&self) -> usize {
-        self.n_zeros()
+    fn count_zeros(&self) -> usize {
+        self.count_zeros()
     }
 }
 
 impl SelectBin for RSNarrow {
     fn select1(&self, i: usize) -> Option<usize> {
-        if i >= self.n_ones() {
+        if i >= self.count_ones() {
             return None;
         }
 
@@ -320,7 +320,7 @@ impl SelectBin for RSNarrow {
     }
 
     fn select0(&self, i: usize) -> Option<usize> {
-        if i >= self.n_zeros() {
+        if i >= self.count_zeros() {
             return None;
         }
 
