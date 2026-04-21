@@ -181,7 +181,7 @@ pub trait RankBin {
         i - self.rank1_unchecked(i)
     }
 
-    fn n_zeros(&self) -> usize;
+    fn count_zeros(&self) -> usize;
 }
 
 /// A trait for the support of `select` query over the binary alphabet.

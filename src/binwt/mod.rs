@@ -343,7 +343,7 @@ where
             let tmp = self.bvs[level].rank1_unchecked(cur_i);
 
             cur_i = if symbol {
-                tmp + self.bvs[level].n_zeros()
+                tmp + self.bvs[level].count_zeros()
             } else {
                 cur_i - tmp
             };
@@ -478,7 +478,7 @@ where
             let r_hi = unsafe { bv.rank1_unchecked(cur.range.end) };
 
             if r_hi > r_lo {
-                let offset = bv.n_zeros();
+                let offset = bv.count_zeros();
 
                 let frame = OccsRangeFrame {
                     range: offset + r_lo..offset + r_hi,
@@ -555,7 +555,7 @@ where
         for level in 0..symbol_len {
             let bit = ((repr >> (symbol_len - level - 1)) & 1) == 1;
 
-            let offset = self.bvs[level].n_zeros();
+            let offset = self.bvs[level].count_zeros();
 
             let tmp_p = self.bvs[level].rank1_unchecked(cur_p);
             let tmp_i = self.bvs[level].rank1_unchecked(cur_i);
@@ -608,7 +608,7 @@ where
                 self.bvs[level].rank0(b)
             }?;
 
-            b = rank_b + if bit { self.bvs[level].n_zeros() } else { 0 };
+            b = rank_b + if bit { self.bvs[level].count_zeros() } else { 0 };
 
             rank_path_off.push(rank_b);
         }

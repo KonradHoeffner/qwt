@@ -142,9 +142,9 @@ fn main() {
         let rs = RSWide::new(bv);
 
         println!(
-            "created new bitvector | n_ones: {} | n_zeros: {} | len: {}",
-            rs.n_ones(),
-            rs.n_zeros(),
+            "created new bitvector | count_ones: {} | count_zeros: {} | len: {}",
+            rs.count_ones(),
+            rs.count_zeros(),
             rs.bv_len()
         );
 
@@ -154,10 +154,10 @@ fn main() {
         let queries = gen_queries(N_QUERIES, n);
         perf_get(&rs, &queries, n, logn, n);
 
-        let queries = gen_queries(N_QUERIES, rs.n_ones() - 1);
+        let queries = gen_queries(N_QUERIES, rs.count_ones() - 1);
         perf_select1(&rs, &queries, n, logn, n);
 
-        let queries = gen_queries(N_QUERIES, rs.n_zeros() - 1);
+        let queries = gen_queries(N_QUERIES, rs.count_zeros() - 1);
         perf_select0(&rs, &queries, n, logn, n);
     }
 }

@@ -41,15 +41,15 @@ impl DataLine {
     }
 
     #[inline]
-    fn n_ones(&self) -> usize {
+    fn count_ones(&self) -> usize {
         self.words
             .iter()
             .fold(0, |a, x| a + x.count_ones() as usize)
     }
 
     #[inline]
-    fn n_zeros(&self) -> usize {
-        512 - self.n_ones()
+    fn count_zeros(&self) -> usize {
+        512 - self.count_ones()
     }
 }
 
@@ -101,8 +101,8 @@ impl RankBin for DataLine {
         rank
     }
 
-    fn n_zeros(&self) -> usize {
-        self.n_zeros()
+    fn count_zeros(&self) -> usize {
+        self.count_zeros()
     }
 }
 
@@ -118,7 +118,7 @@ fn cast_to_u64_slice(data_lines: &[DataLine]) -> &[u64] {
 
 impl SelectBin for DataLine {
     fn select1(&self, i: usize) -> Option<usize> {
-        if i >= self.n_ones() {
+        if i >= self.count_ones() {
             return None;
         }
 
@@ -144,7 +144,7 @@ impl SelectBin for DataLine {
     }
 
     fn select0(&self, i: usize) -> Option<usize> {
-        if i >= self.n_zeros() {
+        if i >= self.count_zeros() {
             return None;
         }
 
@@ -176,7 +176,7 @@ impl SelectBin for DataLine {
 pub struct BitVector {
     data: Box<[DataLine]>,
     n_bits: usize,
-    n_ones: usize,
+    count_ones: usize,
 }
 
 impl BitVector {
@@ -422,7 +422,7 @@ impl BitVector {
     /// assert_eq!(bv.count_ones(), 5);
     /// ```
     pub fn count_ones(&self) -> usize {
-        self.n_ones
+        self.count_ones
     }
 
     /// Counts the number of zeros (bits set to 0) in the bit vector.
@@ -440,7 +440,7 @@ impl BitVector {
     #[inline]
     #[must_use]
     pub fn count_zeros(&self) -> usize {
-        self.len() - self.n_ones
+        self.len() - self.count_ones
     }
 
     /// Returns the number of DataLine in the bitvector
@@ -596,7 +596,7 @@ impl From<BitVectorMut> for BitVector {
         Self {
             data: bvm.data.into_boxed_slice(),
             n_bits: bvm.n_bits,
-            n_ones: bvm.n_ones,
+            count_ones: bvm.count_ones,
         }
     }
 }
@@ -626,7 +626,7 @@ impl From<BitVector> for BitVectorMut {
         Self {
             data: bv.data.into(),
             n_bits: bv.n_bits,
-            n_ones: bv.n_ones,
+            count_ones: bv.count_ones,
         }
     }
 }
@@ -813,7 +813,7 @@ impl<'a> ExactSizeIterator for BitVectorIter<'a> {
 pub struct BitVectorMut {
     data: Vec<DataLine>,
     n_bits: usize,
-    n_ones: usize,
+    count_ones: usize,
 }
 
 impl BitVectorMut {
@@ -931,7 +931,7 @@ impl BitVectorMut {
             if let Some(last) = self.data.last_mut() {
                 last.set_symbol(1, pos_in_line);
             }
-            self.n_ones += 1;
+            self.count_ones += 1;
         }
         self.n_bits += 1;
     }
@@ -968,7 +968,7 @@ impl BitVectorMut {
             return;
         }
 
-        // self.n_ones += bits.count_ones() as usize; taken care in push
+        // self.count_ones += bits.count_ones() as usize; taken care in push
 
         // let pos_in_line: usize = self.n_bits & 511;
         // self.n_bits += len; taken care in push
@@ -1038,10 +1038,10 @@ impl BitVectorMut {
         // SAFETY: check above guarantees we are within the bound
         unsafe {
             if bit && !self.get_unchecked(index) {
-                self.n_ones += 1;
+                self.count_ones += 1;
             }
             if !bit && self.get_unchecked(index) {
-                self.n_ones -= 1;
+                self.count_ones -= 1;
             }
         }
 
@@ -1173,7 +1173,7 @@ impl BitVectorMut {
             return;
         }
 
-        self.n_ones += bits.count_ones() as usize;
+        self.count_ones += bits.count_ones() as usize;
 
         // let mask = if len == 64 {
         //     std::u64::MAX
@@ -1372,7 +1372,7 @@ impl BitVectorMut {
     /// assert_eq!(bv.count_ones(), 2);
     /// ```
     pub fn count_ones(&self) -> usize {
-        self.n_ones
+        self.count_ones
     }
 
     /// Counts the number of zeros (bits set to 0) in the bit vector.
@@ -1392,7 +1392,7 @@ impl BitVectorMut {
     #[inline]
     #[must_use]
     pub fn count_zeros(&self) -> usize {
-        self.len() - self.n_ones
+        self.len() - self.count_ones
     }
 }
 
