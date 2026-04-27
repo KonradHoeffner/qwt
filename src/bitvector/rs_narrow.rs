@@ -108,6 +108,12 @@ impl RSNarrow {
         }
     }
 
+    /// Returns the number of bits in the bitvector.
+    #[inline(always)]
+    pub fn len(&self) -> usize {
+        self.bv.len()
+    }
+
     /// Returns a reference to the underlying bitvector.
     #[inline]
     pub fn bit_vector(&self) -> &BitVector {

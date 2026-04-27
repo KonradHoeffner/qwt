@@ -136,7 +136,7 @@ impl RSWide {
 
     /// Returns the number of bits in the bitvector.
     #[inline(always)]
-    pub fn bv_len(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.bv.len()
     }
 

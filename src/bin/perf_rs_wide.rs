@@ -145,7 +145,7 @@ fn main() {
             "created new bitvector | count_ones: {} | count_zeros: {} | len: {}",
             rs.count_ones(),
             rs.count_zeros(),
-            rs.bv_len()
+            rs.len()
         );
 
         let queries = gen_queries(N_QUERIES, n);
