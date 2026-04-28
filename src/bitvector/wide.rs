@@ -335,7 +335,7 @@ impl SelectBin for RS {
     /// Returns `None` if the data structure has no such element (i >= maximum rank1)
     /// # Examples
     /// ```
-    /// use qwt::{BitVector, RS, SelectBin};
+    /// use qwt::{BitVector, wide::RS, SelectBin};
     ///
     ///
     /// let vv: Vec<usize> = vec![3, 5, 8, 128, 129, 513, 1000, 1024, 1025];
@@ -380,7 +380,7 @@ impl SelectBin for RS {
     /// Returns `None` if the data structure has no such element (i >= maximum rank0)
     /// # Examples
     /// ```
-    /// use qwt::{BitVector, RS, SelectBin};
+    /// use qwt::{BitVector, wide::RS, SelectBin};
     /// use qwt::perf_and_test_utils::negate_vector;
     ///
     /// let vv: Vec<usize> = vec![3, 5, 8, 128, 129, 513, 1000, 1024, 1025];
@@ -427,6 +427,3 @@ impl From<BitVector> for RS {
         RS::new(bv)
     }
 }
-
-#[cfg(test)]
-mod tests;

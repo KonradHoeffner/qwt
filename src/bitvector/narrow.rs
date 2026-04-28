@@ -346,6 +346,3 @@ impl From<BitVector> for RS {
         RS::new(bv)
     }
 }
-
-#[cfg(test)]
-mod tests;

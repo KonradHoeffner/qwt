@@ -1559,4 +1559,6 @@ impl std::fmt::Debug for BitVectorMut {
 }
 
 #[cfg(test)]
+mod rs_tests;
+#[cfg(test)]
 mod tests;
