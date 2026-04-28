@@ -74,41 +74,7 @@ macro_rules! generate_rs_tests {
             }
 
             #[test]
-            fn test_select1() {
-                let vv: Vec<usize> = vec![3, 5, 8, 128, 129, 513];
-                let bv: BitVector = vv.iter().copied().collect();
-                let rs = <$RS>::new(bv);
-
-                println!("{:?}", rs.bit_vector());
-                //println!("{:?}", rs.block_rank_pairs);
-
-                let i = 5;
-                let selected = rs.select1(i).unwrap();
-                println!("select1({}) = {}", i, selected);
-
-                let j = selected;
-                println!("rank1({}) = {}", j, rs.rank1(j).unwrap());
-            }
-
-            #[test]
             fn test_select0() {
-                let vv: Vec<usize> = vec![0, 5, 8, 128, 129, 513];
-                let bv: BitVector = vv.iter().copied().collect();
-                let rs = <$RS>::new(bv);
-
-                println!("{:?}", rs.bit_vector());
-                //println!("{:?}", rs.block_rank_pairs);
-
-                let i = 0;
-                let selected = rs.select0(i).unwrap();
-                println!("select0({}) = {}", i, selected);
-
-                let j = selected;
-                println!("rank0({}) = {}", j, rs.rank0(j).unwrap());
-            }
-
-            #[test]
-            fn test_select0_big() {
                 let vv: Vec<usize> = vec![
                     3, 5, 8, 128, 129, 513, 1000, 1024, 1025, 4096, 7500, 7600, 7630, 7680, 8000,
                     8001, 10000,
@@ -126,7 +92,7 @@ macro_rules! generate_rs_tests {
             }
 
             #[test]
-            fn test_select1_big() {
+            fn test_select1() {
                 let vv: Vec<usize> = vec![
                     3, 5, 8, 128, 129, 513, 1000, 1024, 1025, 4096, 7500, 7600, 7630, 7680, 8000,
                     8001, 10000,
@@ -143,7 +109,7 @@ macro_rules! generate_rs_tests {
 
             #[test]
             fn test_random_select1() {
-                let vv: Vec<usize> = gen_strictly_increasing_sequence(10000, 1 << 20);
+                let vv: Vec<usize> = gen_strictly_increasing_sequence(10000, 1 << 22);
                 let bv: BitVector = vv.iter().copied().collect();
                 let rs = <$RS>::new(bv);
 
@@ -155,7 +121,7 @@ macro_rules! generate_rs_tests {
 
             #[test]
             fn test_random_select0() {
-                let vv: Vec<usize> = gen_strictly_increasing_sequence(10000, 1 << 20);
+                let vv: Vec<usize> = gen_strictly_increasing_sequence(10000, 1 << 22);
                 let bv: BitVector = vv.iter().copied().collect();
                 let rs = <$RS>::new(bv);
 
